@@ -18,3 +18,8 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 ###v.00 - initial Commit
 * display ListView with Data from hardcoded JSON String
 
+###v.01 - display online data
+* create httpRequest to fetch jsonString
+
+
+

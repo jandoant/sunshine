@@ -6,6 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ForecastRequest {
@@ -14,10 +21,82 @@ public class ForecastRequest {
 
         ArrayList<Forecast> result;
 
-        String jsonResponse = "{\"city\":{\"id\":5375480,\"name\":\"Mountain View\",\"coord\":{\"lon\":-122.083847,\"lat\":37.386051},\"country\":\"US\",\"population\":0},\"cod\":\"200\",\"message\":0.0148,\"cnt\":7,\"list\":[{\"dt\":1483387200,\"temp\":{\"day\":8,\"min\":8,\"max\":8,\"night\":8,\"eve\":8,\"morn\":8},\"pressure\":992.7,\"humidity\":100,\"weather\":[{\"id\":500,\"main\":\"Rain\",\"description\":\"light rain\",\"icon\":\"10d\"}],\"speed\":1.66,\"deg\":131,\"clouds\":92,\"rain\":1.19},{\"dt\":1483473600,\"temp\":{\"day\":9.42,\"min\":7.59,\"max\":11.66,\"night\":11.66,\"eve\":10.3,\"morn\":7.59},\"pressure\":989.6,\"humidity\":98,\"weather\":[{\"id\":502,\"main\":\"Rain\",\"description\":\"heavy intensity rain\",\"icon\":\"10d\"}],\"speed\":4.59,\"deg\":165,\"clouds\":92,\"rain\":22.23},{\"dt\":1483560000,\"temp\":{\"day\":13.46,\"min\":2.98,\"max\":13.46,\"night\":2.98,\"eve\":8.88,\"morn\":12.66},\"pressure\":986.24,\"humidity\":99,\"weather\":[{\"id\":502,\"main\":\"Rain\",\"description\":\"heavy intensity rain\",\"icon\":\"10d\"}],\"speed\":5.06,\"deg\":210,\"clouds\":92,\"rain\":14.19},{\"dt\":1483646400,\"temp\":{\"day\":13.43,\"min\":13.04,\"max\":14.21,\"night\":13.26,\"eve\":14.21,\"morn\":13.04},\"pressure\":1005.21,\"humidity\":0,\"weather\":[{\"id\":502,\"main\":\"Rain\",\"description\":\"heavy intensity rain\",\"icon\":\"10d\"}],\"speed\":7.5,\"deg\":164,\"clouds\":95,\"rain\":13.8},{\"dt\":1483732800,\"temp\":{\"day\":13.15,\"min\":12.1,\"max\":13.15,\"night\":12.1,\"eve\":13.11,\"morn\":12.65},\"pressure\":1003.79,\"humidity\":0,\"weather\":[{\"id\":502,\"main\":\"Rain\",\"description\":\"heavy intensity rain\",\"icon\":\"10d\"}],\"speed\":6.12,\"deg\":181,\"clouds\":99,\"rain\":13.29},{\"dt\":1483819200,\"temp\":{\"day\":11.68,\"min\":8.86,\"max\":12.41,\"night\":8.86,\"eve\":12.41,\"morn\":11.66},\"pressure\":1012.4,\"humidity\":0,\"weather\":[{\"id\":501,\"main\":\"Rain\",\"description\":\"moderate rain\",\"icon\":\"10d\"}],\"speed\":1.22,\"deg\":223,\"clouds\":71,\"rain\":3.4},{\"dt\":1483905600,\"temp\":{\"day\":9.76,\"min\":7.63,\"max\":10.64,\"night\":7.63,\"eve\":10.64,\"morn\":9.26},\"pressure\":1012.22,\"humidity\":0,\"weather\":[{\"id\":501,\"main\":\"Rain\",\"description\":\"moderate rain\",\"icon\":\"10d\"}],\"speed\":2.32,\"deg\":60,\"clouds\":100,\"rain\":9.76}]}";
+        URL url = createURL(queryURL);
+
+        if (url == null) {
+            return null;
+        }
+
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         result = createForecastListFromJson(jsonResponse);
         return result;
+    }
+
+    private static String makeHttpRequest(URL url) throws IOException {
+
+        String jsonResponse = "";
+        InputStream inputStream = null;
+
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readInputStream(inputStream);
+            } else {
+                Log.e("LOG", "Your HttpRequest was not successfull. ERROR CODE: " + urlConnection.getResponseCode());
+            }
+        } catch (IOException e) {
+            Log.e("LOG", "An Error occured while establishing your HttpConnection. ERROR CODE: ", e);
+        } finally {
+
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+
+        return jsonResponse;
+    }
+
+    private static String readInputStream(InputStream inputStream) throws IOException {
+
+        StringBuilder output = new StringBuilder();
+
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+
+        String line = bufferedReader.readLine();
+        while (line != null) {
+            output.append(line);
+            line = bufferedReader.readLine();
+        }
+
+        return output.toString();
+    }
+
+    private static URL createURL(String queryURL) {
+
+        if (queryURL == "") {
+            return null;
+        }
+
+        try {
+            return new URL(queryURL);
+        } catch (MalformedURLException e) {
+            Log.e("TAG", "Invalid URL", e);
+            return null;
+        }
     }
 
     private static ArrayList<Forecast> createForecastListFromJson(String jsonResponse) {
