@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".ForecastFragment">
+
+    <item
+        android:id="@+id/settings_refresh"
+        android:checkable="false"
+        android:enabled="true"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="@string/settings_refresh"
+        android:visible="true"
+        app:showAsAction="always"/>
+</menu>

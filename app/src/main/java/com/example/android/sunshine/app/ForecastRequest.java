@@ -47,6 +47,7 @@ public class ForecastRequest {
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
 
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
@@ -114,7 +115,7 @@ public class ForecastRequest {
             JSONArray forecastArr = root.getJSONArray("list");
             for (int i = 0; i < forecastArr.length(); i++) {
                 JSONObject forecastObject = forecastArr.getJSONObject(i);
-                Forecast forecast = extractForecastFromJSONObject(forecastObject);
+                Forecast forecast = extractSingleForecastFromJSONObject(forecastObject);
                 forecastList.add(forecast);
             }
         } catch (JSONException e) {
@@ -125,19 +126,19 @@ public class ForecastRequest {
         return forecastList;
     }
 
-    private static Forecast extractForecastFromJSONObject(JSONObject forecastObject) throws JSONException {
+    private static Forecast extractSingleForecastFromJSONObject(JSONObject forecastObject) throws JSONException {
 
-        //WEATHER
-        JSONArray weather = forecastObject.getJSONArray("weather");
-        //--description
-        String description = weather.getJSONObject(0).getString("description");
-        //HUMIDITY
-        int humidity = forecastObject.getInt("humidity");
-        //TEMPERATURE
-        JSONObject temperature = forecastObject.getJSONObject("temp");
-        //--day
-        int temperature_day = temperature.getInt("day");
+        JSONObject weatherObj = forecastObject.getJSONArray(Forecast.WEATHER).getJSONObject(0);
+        Weather weather = new Weather(weatherObj.getInt(Forecast.WEATHER_ID), weatherObj.getString(Forecast.WEATHER_MAIN), weatherObj.getString(Forecast.WEATHER_DESCRIPTION), weatherObj.getString(Forecast.WEATHER_ICON));
 
-        return new Forecast(description, humidity, temperature_day);
+        JSONObject temperatureObj = forecastObject.getJSONObject(Forecast.TEMPERATURES);
+
+        Forecast forecast = new Forecast();
+        forecast.setPressure(forecastObject.getDouble(Forecast.PRESSURE));
+        forecast.setWeather(weather);
+        forecast.setHumidity(forecastObject.getInt(Forecast.HUMIDITY));
+        forecast.setTemperatures(temperatureObj.getInt(Forecast.TEMPERATURE_DAY), temperatureObj.getInt(Forecast.TEMPERATURE_MIN), temperatureObj.getInt(Forecast.TEMPERATURE_MAX), temperatureObj.getInt(Forecast.TEMPERATURE_NIGHT), temperatureObj.getInt(Forecast.TEMPERATURE_EVENING), temperatureObj.getInt(Forecast.TEMPERATURE_MORNING));
+
+        return forecast;
     }
 }

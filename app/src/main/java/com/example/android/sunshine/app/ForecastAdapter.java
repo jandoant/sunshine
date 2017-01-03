@@ -38,14 +38,14 @@ public class ForecastAdapter extends ArrayAdapter<Forecast> {
 
         //connect Views to XML
         TextView txt_description = (TextView) listItem.findViewById(R.id.txt_description);
-        TextView txt_temperature_day = (TextView) listItem.findViewById(R.id.txt_temperature_day);
-        TextView txt_humidity = (TextView) listItem.findViewById(R.id.txt_humidity);
+        TextView txt_temperature_max = (TextView) listItem.findViewById(R.id.txt_temperature_max);
+        TextView txt_temperature_min = (TextView) listItem.findViewById(R.id.txt_temperature_min);
 
         //put data into Views
         if (forecast != null) {
-            txt_description.setText(forecast.getDescription());
-            txt_temperature_day.setText(String.valueOf(forecast.getTemperatureDay()));
-            txt_humidity.setText(String.valueOf(forecast.getHumidity()));
+            txt_description.setText(forecast.getWeather().getDescription());
+            txt_temperature_max.setText(String.valueOf(forecast.getTemperature(Forecast.TEMPERATURE_DAY)));
+            txt_temperature_min.setText(String.valueOf(forecast.getTemperature(Forecast.TEMPERATURE_MIN)));
         }
 
         return listItem;

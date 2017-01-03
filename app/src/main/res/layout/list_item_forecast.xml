@@ -13,13 +13,13 @@
         tools:text="light rain"/>
 
     <TextView
-        android:id="@+id/txt_temperature_day"
+        android:id="@+id/txt_temperature_max"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="8"/>
 
     <TextView
-        android:id="@+id/txt_humidity"
+        android:id="@+id/txt_temperature_min"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="100"/>

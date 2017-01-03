@@ -21,5 +21,5 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 ###v.01 - display online data
 * create httpRequest to fetch jsonString
 
-
+###v.02 add Refresh Button and functionality
 
