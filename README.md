@@ -23,3 +23,6 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 
 ###v.02 add Refresh Button and functionality
 
+###v.03 add Detail Activity
+* show basic detail info of chosen Forecast
+

@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,15 +15,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by Jan on 03.01.2017.
- */
-
-public class ForecastFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ForecastListFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String OPEN_WEATHER_MAP_API_KEY = "0520e2af6d51ebc90609853be2970c0b";
     private static final String BASE_QUERY_URL_DAILY_FORECAST = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
@@ -30,7 +26,7 @@ public class ForecastFragment extends Fragment implements AdapterView.OnItemClic
 
     ProgressBar loadingIndicator;
 
-    public ForecastFragment() {
+    public ForecastListFragment() {
     }
 
     @Override
@@ -103,7 +99,13 @@ public class ForecastFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Toast.makeText(getActivity(), adapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
+        openDetailActivity(adapter.getItem(position));
+    }
+
+    private void openDetailActivity(Forecast detailForecast) {
+        Intent intent = new Intent(getActivity(), ForecastDetailActivity.class);
+        intent.putExtra("detail", detailForecast.toString());
+        startActivity(intent);
     }
 
     private class ForecastAsyncTask extends AsyncTask<String, Void, ArrayList<Forecast>> {
