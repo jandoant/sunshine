@@ -34,3 +34,5 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 ###v.05 user can navigate to Settings Activitiy via MainActivity and DetailActivity
 
 ###v.06 Menu Option to show selected Location on Map
+
+###v0.7 add Share Action Provider in DetailFragment

@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.models;
 
 /**
  * Created by Jan on 04.01.2017.

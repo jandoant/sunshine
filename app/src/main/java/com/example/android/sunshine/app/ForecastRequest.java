@@ -2,6 +2,9 @@ package com.example.android.sunshine.app;
 
 import android.util.Log;
 
+import com.example.android.sunshine.app.models.Forecast;
+import com.example.android.sunshine.app.models.Weather;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

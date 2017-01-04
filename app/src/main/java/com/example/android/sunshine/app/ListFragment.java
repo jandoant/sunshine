@@ -18,9 +18,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.example.android.sunshine.app.models.Forecast;
+
 import java.util.ArrayList;
 
-public class ForecastListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String OPEN_WEATHER_MAP_API_KEY = "0520e2af6d51ebc90609853be2970c0b";
     private static final String BASE_QUERY_URL_DAILY_FORECAST = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
@@ -28,7 +30,7 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
 
     ProgressBar loadingIndicator;
 
-    public ForecastListFragment() {
+    public ListFragment() {
     }
 
     @Override
@@ -89,8 +91,7 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.forecast_fragment_menu, menu);
+        inflater.inflate(R.menu.menu_list_fragment, menu);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void openDetailActivity(Forecast detailForecast) {
-        Intent intent = new Intent(getActivity(), ForecastDetailActivity.class);
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("detail", detailForecast.toString());
         startActivity(intent);
     }

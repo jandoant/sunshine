@@ -3,10 +3,11 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ForecastDetailActivity extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,9 +15,10 @@ public class ForecastDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_forecast_detail);
 
         if (savedInstanceState == null) {
-            ForecastDetailFragment forecastDetailFragment = new ForecastDetailFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.detail_container, forecastDetailFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.detail_container, new DetailFragment()).commit();
         }
+
+        Log.d("TAG", "Menu created");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

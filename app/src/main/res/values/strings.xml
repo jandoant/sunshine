@@ -3,7 +3,7 @@
 
     <!-- Activity Titles -->
     <string name="app_name">Sunshine</string>
-    <string name="title_activity_forecast_detail">ForecastDetailActivity</string>
+    <string name="title_activity_forecast_detail">Detail</string>
     <string name="title_activity_settings">Settings</string>
     <!-- OptionsMenu Categories -->
     <string name="action_settings">Settings</string>
