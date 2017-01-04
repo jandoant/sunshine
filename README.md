@@ -31,3 +31,5 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 * change Location
 * pick units
 
+###v.05 user can navigate to Settings Activitiy via MainActivity and DetailActivity
+
