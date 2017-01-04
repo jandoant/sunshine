@@ -26,3 +26,8 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 ###v.03 add Detail Activity
 * show basic detail info of chosen Forecast
 
+###v.04 add Settings
+* add SettingsAcitvity
+* change Location
+* pick units
+

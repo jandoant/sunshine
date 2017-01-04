@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,20 +39,6 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
         adapter = new ForecastAdapter(getActivity(), new ArrayList<Forecast>());
     }
 
-    private String buildQueryURL(String postalcode) {
-
-        Uri baseUri = Uri.parse(BASE_QUERY_URL_DAILY_FORECAST);
-
-        Uri.Builder uriBuilder = baseUri.buildUpon();
-        uriBuilder.appendQueryParameter("appid", OPEN_WEATHER_MAP_API_KEY);
-        uriBuilder.appendQueryParameter("format", "json");
-        uriBuilder.appendQueryParameter("q", postalcode);
-        uriBuilder.appendQueryParameter("cnt", "7");
-        uriBuilder.appendQueryParameter("units", "metric");
-
-        return uriBuilder.toString();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -68,6 +56,35 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         reloadData();
+    }
+
+    private void reloadData() {
+        //AsyncTask
+        loadingIndicator.setVisibility(View.VISIBLE);
+        ForecastAsyncTask forecastAsyncTask = new ForecastAsyncTask();
+        String url = buildQueryURL();
+        forecastAsyncTask.execute(url);
+    }
+
+    private String buildQueryURL() {
+
+        SharedPreferences prefFile = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        //Auslesen der aktuell gespeicherten Settings, falls noch nix gespeichert, dann default Werte verwenden
+        String locationSetting = prefFile.getString(getString(R.string.settings_location_key), getString(R.string.settings_location_default));
+        String unitSetting = prefFile.getString(getString(R.string.settings_units_key), getString(R.string.settings_units_default));
+
+        //Zusammensetzen der Url
+        Uri baseUri = Uri.parse(BASE_QUERY_URL_DAILY_FORECAST);
+
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter("appid", OPEN_WEATHER_MAP_API_KEY);
+        uriBuilder.appendQueryParameter("format", "json");
+        uriBuilder.appendQueryParameter("q", locationSetting);
+        uriBuilder.appendQueryParameter("cnt", "7");
+        uriBuilder.appendQueryParameter("units", unitSetting);
+
+        return uriBuilder.toString();
     }
 
     @Override
@@ -88,13 +105,6 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
         }//Ende switch
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void reloadData() {
-        //AsyncTask
-        loadingIndicator.setVisibility(View.VISIBLE);
-        ForecastAsyncTask forecastAsyncTask = new ForecastAsyncTask();
-        forecastAsyncTask.execute(buildQueryURL("09125,de"));
     }
 
     @Override

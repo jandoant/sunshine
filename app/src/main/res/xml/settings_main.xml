@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="Settings">
+    <EditTextPreference
+        android:defaultValue="@string/settings_location_default"
+        android:icon="@drawable/ic_location_on_black_24dp"
+        android:key="@string/settings_location_key"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/settings_location_default"
+        android:title="Location"/>
+
+    <ListPreference
+        android:defaultValue="@string/settings_units_default"
+        android:entries="@array/settings_units_labels_array"
+        android:entryValues="@array/settings_units_values_array"
+        android:icon="@drawable/ic_thermometer_black_24dp"
+        android:key="@string/settings_units_key"
+        android:title="Units"/>
+
+</PreferenceScreen>
