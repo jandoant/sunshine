@@ -22,10 +22,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         addPreferencesFromResource(R.xml.settings_main);
 
         //UX for displaying Summary of Settings
-        Preference location = findPreference(getString(R.string.settings_location_key));
-        bindPreferenceSummaryToValue(location);
-        Preference unit = findPreference(getString(R.string.settings_units_key));
-        bindPreferenceSummaryToValue(unit);
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_units_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
@@ -41,18 +39,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        String stringValue = newValue.toString();
+        String summaryString = newValue.toString();
 
         //wenn es sich um eine ListPrefernce handelt sollen die Labels als summary angezeigt werden, nicht die Values
         if (preference instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(stringValue);
+            int prefIndex = listPreference.findIndexOfValue(summaryString);
             if (prefIndex >= 0) {
                 CharSequence[] labels = listPreference.getEntries();
                 preference.setSummary(labels[prefIndex]);
             }
         } else {
-            preference.setSummary(stringValue);
+            preference.setSummary(summaryString);
         }
         return true;
     }

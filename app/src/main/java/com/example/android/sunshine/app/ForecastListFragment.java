@@ -71,8 +71,8 @@ public class ForecastListFragment extends Fragment implements AdapterView.OnItem
         SharedPreferences prefFile = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         //Auslesen der aktuell gespeicherten Settings, falls noch nix gespeichert, dann default Werte verwenden
-        String locationSetting = prefFile.getString(getString(R.string.settings_location_key), getString(R.string.settings_location_default));
-        String unitSetting = prefFile.getString(getString(R.string.settings_units_key), getString(R.string.settings_units_default));
+        String locationSetting = prefFile.getString(getString(R.string.settings_location_key), getString(R.string.settings_location_default_value));
+        String unitSetting = prefFile.getString(getString(R.string.settings_units_key), getString(R.string.settings_units_default_value));
 
         //Zusammensetzen der Url
         Uri baseUri = Uri.parse(BASE_QUERY_URL_DAILY_FORECAST);

@@ -4,23 +4,25 @@
     <!-- Activity Titles -->
     <string name="app_name">Sunshine</string>
     <string name="title_activity_forecast_detail">ForecastDetailActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
     <!-- OptionsMenu Categories -->
     <string name="action_settings">Settings</string>
     <string name="settings_refresh">Refresh</string>
 
     <!--Settings -->
-    <string name="settings_location_default">Chemnitz,DE</string>
+    <string name="settings_location_title">Location</string>
+    <string name="settings_location_default_value">Chemnitz,DE</string>
     <string name="settings_location_key" translatable="false">settings_location_key</string>
 
+    <string name="settings_units_title">Units</string>
     <string name="settings_units_key">settings_unit_key</string>
+    <string name="settings_units_default_value" translatable="false">metric</string>
 
     <string name="settings_units_metric_label">Metric</string>
-    <string name="settings_units_metric_value">metric</string>
+    <string name="settings_units_metric_value" translatable="false">metric</string>
 
     <string name="settings_units_imperial_label">Imperial</string>
-    <string name="settings_units_imperial_value">imperial</string>
-    <string name="settings_units_default">metric</string>
-
+    <string name="settings_units_imperial_value" translatable="false">imperial</string>
+    <string name="action_show_on_map">Show on Map</string>
 
 </resources>
