@@ -8,7 +8,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,6 +20,15 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setIcon(getResources().getDrawable(R.drawable.ic_launcher));
+
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.list_container, new ListFragment()).commit();
         }
@@ -53,6 +64,11 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void openSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
     private void showPreferredLocationOnMap() {
         SharedPreferences prefFile = PreferenceManager.getDefaultSharedPreferences(this);
         String locationSetting = prefFile.getString(getString(R.string.settings_location_key), getString(R.string.settings_location_default_value));
@@ -72,10 +88,5 @@ public class MainActivity extends ActionBarActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
-    }
-
-    private void openSettingsActivity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
     }
 }//ENDE ACTIVITY

@@ -44,7 +44,7 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_forecast);
         listView.setAdapter(adapter);

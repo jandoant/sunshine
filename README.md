@@ -36,3 +36,9 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 ###v.06 Menu Option to show selected Location on Map
 
 ###v0.7 add Share Action Provider in DetailFragment
+
+###v0.8 Polish Design
+* introduce color Palette
+* add Custom Toolbar to Layout
+
+###v1.0 Starting Point SQLite Inclusion
