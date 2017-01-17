@@ -3,11 +3,11 @@ package com.example.android.sunshine.app;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,12 +22,13 @@ import com.example.android.sunshine.app.models.Forecast;
 
 import java.util.ArrayList;
 
-public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ListFragment extends Fragment implements AdapterView.OnItemClickListener, android.support.v4.app.LoaderManager.LoaderCallbacks<ArrayList<Forecast>> {
     private static final String OPEN_WEATHER_MAP_API_KEY = "0520e2af6d51ebc90609853be2970c0b";
     private static final String BASE_QUERY_URL_DAILY_FORECAST = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
-    ForecastAdapter adapter;
+    private static final int LOADER_ID = 0;
 
+    ForecastAdapter adapter;
     ProgressBar loadingIndicator;
 
     public ListFragment() {
@@ -37,8 +38,9 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
-        //Adapter
+        //leerer Adapter
         adapter = new ForecastAdapter(getActivity(), new ArrayList<Forecast>());
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -55,17 +57,35 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        reloadData();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_list_fragment, menu);
     }
 
-    private void reloadData() {
-        //AsyncTask
-        loadingIndicator.setVisibility(View.VISIBLE);
-        ForecastAsyncTask forecastAsyncTask = new ForecastAsyncTask();
-        String url = buildQueryURL();
-        forecastAsyncTask.execute(url);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.settings_refresh:
+                getLoaderManager().restartLoader(LOADER_ID, null, this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        openDetailActivity(adapter.getItem(position));
+    }
+
+    private void openDetailActivity(Forecast detailForecast) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("detail", detailForecast.toString());
+        startActivity(intent);
+    }
+
+    @Override
+    public Loader<ArrayList<Forecast>> onCreateLoader(int id, Bundle args) {
+        return new ForecastLoader(getActivity(), buildQueryURL());
     }
 
     private String buildQueryURL() {
@@ -84,66 +104,34 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         uriBuilder.appendQueryParameter("format", "json");
         uriBuilder.appendQueryParameter("q", locationSetting);
         uriBuilder.appendQueryParameter("cnt", "7");
-        uriBuilder.appendQueryParameter("units", unitSetting);
+        uriBuilder.appendQueryParameter("units", "metric");
+
+        Log.d("TAG1", uriBuilder.toString());
 
         return uriBuilder.toString();
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_list_fragment, menu);
+    public void onLoadFinished(Loader<ArrayList<Forecast>> loader, ArrayList<Forecast> result) {
+        updateUI(result);
+        Log.d("TAG1", "onLoadFinished");
+        loadingIndicator.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.settings_refresh:
-                adapter.clear();
-                reloadData();
-                break;
-        }//Ende switch
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        openDetailActivity(adapter.getItem(position));
-    }
-
-    private void openDetailActivity(Forecast detailForecast) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("detail", detailForecast.toString());
-        startActivity(intent);
-    }
-
-    private class ForecastAsyncTask extends AsyncTask<String, Void, ArrayList<Forecast>> {
-
-        @Override
-        protected ArrayList<Forecast> doInBackground(String... queryURL) {
-            return ForecastRequest.fetchEarthquakeData(queryURL[0]);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Forecast> result) {
-            updateUI(result);
-            loadingIndicator.setVisibility(View.GONE);
-        }
-
-        private void updateUI(ArrayList<Forecast> result) {
+    private void updateUI(ArrayList<Forecast> result) {
                 /*
-                If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+                If there is a valid list of {@link Forecast}s, then add them to the adapter's
                 data set. This will trigger the ListView to update
                 */
-            if (result != null && !result.isEmpty()) {
-                adapter.clear();
-                for (Forecast forecast : result) {
-                    adapter.add(forecast);
-                }
-            }
+        if (result != null && !result.isEmpty()) {
+            adapter.clear();
+            adapter.addAll(result);
         }
-    }//ENDE ASYNCTASK
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Forecast>> loader) {
+        adapter.clear();
+    }
 }//ENDE FRAGMENT
 

@@ -42,3 +42,11 @@ A changelog for the course can be found [here](https://docs.google.com/a/knowlab
 * add Custom Toolbar to Layout
 
 ###v1.0 Starting Point SQLite Inclusion
+
+###v1.1 Improve ListItem UI
+* DateField shows "Today, Tomorrow, Friday, Saturday,..."
+* First List Item looks different than all other List Items
+* Temperature gets formatted to show Unit Symbol
+
+
+

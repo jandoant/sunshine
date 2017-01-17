@@ -27,8 +27,8 @@ public class Forecast {
     public static final String TEMPERATURE_EVENING = "eve";
     public static final String TEMPERATURE_MORNING = "morn";
 
-    private String date;
-    private ArrayList<Integer> temperatures;
+    private Long dateMilliseconds;
+    private ArrayList<Double> temperatures;
     private double pressure;
     private int humidity;
     private Weather weather;
@@ -44,11 +44,11 @@ public class Forecast {
         this.humidity = humidity;
     }
 
-    public ArrayList<Integer> getTemperatures() {
+    public ArrayList<Double> getTemperatures() {
         return temperatures;
     }
 
-    public void setTemperatures(int tempDay, int tempMin, int tempMax, int tempNight, int tempEve, int tempMorn) {
+    public void setTemperatures(double tempDay, double tempMin, double tempMax, double tempNight, double tempEve, double tempMorn) {
 
         if (this.temperatures == null) {
             this.temperatures = new ArrayList<>();
@@ -64,7 +64,7 @@ public class Forecast {
         temperatures.add(tempMorn);
     }
 
-    public int getTemperature(String key) {
+    public double getTemperature(String key) {
 
         int index;
 
@@ -112,11 +112,19 @@ public class Forecast {
     @Override
     public String toString() {
         return "Forecast{" +
-                "date='" + date + '\'' +
+                "date='" + dateMilliseconds + '\'' +
                 ", temperatures=" + temperatures +
                 ", pressure=" + pressure +
                 ", humidity=" + humidity +
                 ", weather=" + weather +
                 '}';
+    }
+
+    public Long getDateMilliseconds() {
+        return dateMilliseconds;
+    }
+
+    public void setDateMilliseconds(Long dateMilliseconds) {
+        this.dateMilliseconds = dateMilliseconds;
     }
 }
